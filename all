@@ -7,3 +7,5 @@ SELECT YEAR(o.order_date) AS Aasta, COUNT(o.id) AS `Tellimuste arv`, ROUND(SUM(b
 SELECT clients.id, clients.username, SUM(books.price) AS 'Total amount spent' FROM clients JOIN orders ON clients.id = orders.client_id JOIN books ON orders.book_id = books.id WHERE YEAR(orders.order_date) = (SELECT MAX(YEAR(order_date)) FROM orders)  GROUP BY clients.id ORDER BY SUM(books.price) DESC;
 SELECT books.title, COUNT(*) AS 'Müüdud eksemplaride arv' FROM orders LEFT JOIN books ON orders.book_id = books.id WHERE YEAR(orders.order_date) = (SELECT MAX(YEAR(order_date)) FROM orders) GROUP BY orders.book_id ORDER BY COUNT(*) DESC LIMIT 10;
 SELECT * FROM books WHERE price > (SELECT AVG(price) FROM books);
+
+SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
