@@ -9,3 +9,5 @@ SELECT books.title, COUNT(*) AS 'Müüdud eksemplaride arv' FROM orders LEFT JOI
 SELECT * FROM books WHERE price > (SELECT AVG(price) FROM books);
 
 SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
+SELECT MIN(price) AS cheapest_book,MAX(price) AS expensivest_book, AVG(price) AS average_book FROM books;
+SELECT MAX(price) AS expensivest_used_book FROM books WHERE type = 'used';
