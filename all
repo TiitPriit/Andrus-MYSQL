@@ -8,8 +8,44 @@ SELECT clients.id, clients.username, SUM(books.price) AS 'Total amount spent' FR
 SELECT books.title, COUNT(*) AS 'Müüdud eksemplaride arv' FROM orders LEFT JOIN books ON orders.book_id = books.id WHERE YEAR(orders.order_date) = (SELECT MAX(YEAR(order_date)) FROM orders) GROUP BY orders.book_id ORDER BY COUNT(*) DESC LIMIT 10;
 SELECT * FROM books WHERE price > (SELECT AVG(price) FROM books);
 
-SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
-SELECT MIN(price) AS cheapest_book,MAX(price) AS expensivest_book, AVG(price) AS average_book FROM books;
-SELECT MAX(price) AS expensivest_used_book FROM books WHERE type = 'used';
-SELECT type AS Type, AVG(CASE WHEN type = 'new' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'new' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'used' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'used' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'E-book' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'E-book' THEN 1 ELSE 0 END) AS 'amount' FROM books GROUP BY type;
-SELECT title, price, type FROM books WHERE type = 'used' AND price > (SELECT AVG(price) FROM books WHERE type = 'new') ORDER BY price ASC;
+2 SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
+3 SELECT MIN(price) AS cheapest_book,MAX(price) AS expensivest_book, AVG(price) AS average_book FROM books;3SELECT MAX(price) AS expensivest_used_book FROM books WHERE type = 'used';
+4 SELECT type AS Type, AVG(CASE WHEN type = 'new' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'new' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'used' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'used' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'E-book' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'E-book' THEN 1 ELSE 0 END) AS 'amount' FROM books GROUP BY type;
+5 SELECT title, price, type FROM books WHERE type = 'used' AND price > (SELECT AVG(price) FROM books WHERE type = 'new') ORDER BY price ASC;
+
+6
+
+WITH most_sold_authors AS (
+  SELECT
+    authors,
+    AVG(price) AS average_price
+  FROM books
+  GROUP BY authors
+  ORDER BY COUNT(*) DESC
+  LIMIT 1
+)
+SELECT
+  title,
+  price,
+  type
+FROM books
+WHERE price > (SELECT average_price FROM most_sold_authors)
+ORDER BY price ASC;
+
+
+7
+
+SELECT
+  title,
+  release_date
+FROM books
+WHERE release_date % 2 = 0;
+
+8
+
+SELECT
+  language AS language,
+  COUNT(*) AS stock_saldo
+FROM books
+GROUP BY language
+ORDER BY stock_saldo DESC;
