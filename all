@@ -1,3 +1,4 @@
+1.
 SELECT * FROM books;
 SELECT title, release_date, price, type FROM books WHERE release_date >= '2010' AND type != 'ebook' AND type != 'used'ORDER BY title ASC; 
 SELECT title, YEAR(release_date) AS year, price, type FROM books WHERE release_date < '1970' AND type = 'used' AND price < 20;
@@ -7,11 +8,12 @@ SELECT YEAR(o.order_date) AS Aasta, COUNT(o.id) AS `Tellimuste arv`, ROUND(SUM(b
 SELECT clients.id, clients.username, SUM(books.price) AS 'Total amount spent' FROM clients JOIN orders ON clients.id = orders.client_id JOIN books ON orders.book_id = books.id WHERE YEAR(orders.order_date) = (SELECT MAX(YEAR(order_date)) FROM orders)  GROUP BY clients.id ORDER BY SUM(books.price) DESC;
 SELECT books.title, COUNT(*) AS 'Müüdud eksemplaride arv' FROM orders LEFT JOIN books ON orders.book_id = books.id WHERE YEAR(orders.order_date) = (SELECT MAX(YEAR(order_date)) FROM orders) GROUP BY orders.book_id ORDER BY COUNT(*) DESC LIMIT 10;
 SELECT * FROM books WHERE price > (SELECT AVG(price) FROM books);
-
-2 SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
-3 SELECT MIN(price) AS cheapest_book,MAX(price) AS expensivest_book, AVG(price) AS average_book FROM books;3SELECT MAX(price) AS expensivest_used_book FROM books WHERE type = 'used';
-4 SELECT type AS Type, AVG(CASE WHEN type = 'new' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'new' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'used' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'used' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'E-book' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'E-book' THEN 1 ELSE 0 END) AS 'amount' FROM books GROUP BY type;
-5 SELECT title, price, type FROM books WHERE type = 'used' AND price > (SELECT AVG(price) FROM books WHERE type = 'new') ORDER BY price ASC;
-6 SELECT books.title AS Raamat, books.price AS Hind FROM books WHERE books.price > ( SELECT AVG(subquery_books.price) FROM (SELECT books.price FROM books JOIN book_authors ON books.id = book_authors.book_id JOIN ( SELECT book_authors.author_id, COUNT(orders.id) AS sold_count FROM book_authors JOIN orders ON book_authors.book_id = orders.book_id GROUP BY book_authors.author_id ORDER BY sold_count DESC LIMIT 1 ) AS most_sold_author ON book_authors.author_id = most_sold_author.author_id WHERE books.price IS NOT NULL) AS subquery_books);
-7 SELECT title, release_date FROM books WHERE release_date % 2 = 0;
-8 SELECT language AS language, COUNT(*) AS stock_saldo FROM books GROUP BY language ORDER BY stock_saldo DESC;
+2.
+SELECT SUM(stock_saldo * price) AS laoväärtus FROM books;
+SELECT MIN(price) AS cheapest_book,MAX(price) AS expensivest_book, AVG(price) AS average_book FROM books;3SELECT MAX(price) AS expensivest_used_book FROM books WHERE type = 'used';
+SELECT type AS Type, AVG(CASE WHEN type = 'new' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'new' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'used' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'used' THEN 1 ELSE 0 END) AS 'amount', AVG(CASE WHEN type = 'E-book' THEN price ELSE NULL END) AS 'average price', SUM(CASE WHEN type = 'E-book' THEN 1 ELSE 0 END) AS 'amount' FROM books GROUP BY type;
+SELECT title, price, type FROM books WHERE type = 'used' AND price > (SELECT AVG(price) FROM books WHERE type = 'new') ORDER BY price ASC;
+SELECT books.title AS Raamat, books.price AS Hind FROM books WHERE books.price > ( SELECT AVG(subquery_books.price) FROM (SELECT books.price FROM books JOIN book_authors ON books.id = book_authors.book_id JOIN ( SELECT book_authors.author_id, COUNT(orders.id) AS sold_count FROM book_authors JOIN orders ON book_authors.book_id = orders.book_id GROUP BY book_authors.author_id ORDER BY sold_count DESC LIMIT 1 ) AS most_sold_author ON book_authors.author_id = most_sold_author.author_id WHERE books.price IS NOT NULL) AS subquery_books);
+SELECT title, release_date FROM books WHERE release_date % 2 = 0;
+SELECT language AS language, COUNT(*) AS stock_saldo FROM books GROUP BY language ORDER BY stock_saldo DESC;
+3.
