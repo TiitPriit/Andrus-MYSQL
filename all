@@ -17,3 +17,4 @@ SELECT books.title AS Raamat, books.price AS Hind FROM books WHERE books.price >
 SELECT title, release_date FROM books WHERE release_date % 2 = 0;
 SELECT language AS language, COUNT(*) AS stock_saldo FROM books GROUP BY language ORDER BY stock_saldo DESC;
 3.
+6-UPDATE books SET price = price * 1.05, pages = pages - 5 WHERE id > 0
